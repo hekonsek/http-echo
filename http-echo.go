@@ -2,15 +2,18 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"github.com/fatih/color"
+	"github.com/hekonsek/osexit"
 	"net/http"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
+	_, err := fmt.Fprintf(w, "Hi there, I love %s!\n", r.URL.Path[1:])
+	osexit.ExitOnError(err)
 }
 
 func main() {
+	fmt.Printf("Started echo server on %s .\n", color.GreenString("http://localhost:8080"))
 	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	osexit.ExitOnError(http.ListenAndServe(":8080", nil))
 }
